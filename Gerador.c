@@ -3,12 +3,12 @@
 
 int main() {
 
-  int i,j;
-  int qtdSim; // quantidade de simbolos
-  int qtdEst; // quantidade de estados
-  int estIni; // armazena estado inicial
-  int qtdFin; // quantidade de estados finais
-  int estFin; // caso final unico
+	int i,j;
+	int qtdSim; // quantidade de simbolos
+	int qtdEst; // quantidade de estados
+	int estIni; // armazena estado inicial
+	int qtdFin; // quantidade de estados finais
+	int estFin; // caso final unico
 	int cFDP; // variavel auxiliar
 
 
@@ -17,7 +17,7 @@ int main() {
 	printf("Quantidade de simbolos: ");
 	scanf("%d", &qtdSim);
 
-  char vSim[qtdSim];  // vetor para armazenar os simbolos
+	char vSim[qtdSim];  // vetor para armazenar os simbolos
 
 	// amazenamentos dos simobolos
 	for(i=0; i<qtdSim; i++){
@@ -27,8 +27,8 @@ int main() {
 	}
 
 
-  // quantidade de estados
-  printf("Insira a quantidade de estados: ");
+	// quantidade de estados
+	printf("Insira a quantidade de estados: ");
 	scanf("%d", &qtdEst);
 
 
@@ -43,40 +43,38 @@ int main() {
 	scanf("%d", &qtdFin);
 
 
-  int vFin[qtdFin]; // vetor para armazenar os finais
+	int vFin[qtdFin]; // vetor para armazenar os finais
 
 
 	// Caso seja mais de 1 final
 	if(qtdFin > 1){
 		for(i=0; i<qtdFin; i++){
-      printf("Insira o final %d+1:", i);
-      scanf("%d", &vFin[i]);
+    	printf("Insira o final %d+1:", i);
+    	scanf("%d", &vFin[i]);
 		}
 	}
-  else{
-    printf("Insira o estado final: ");
-    scanf("%d", &estFin);
-  }
+	else{
+    	printf("Insira o estado final: ");
+    	scanf("%d", &estFin);
+	}
 
 
-  int m[qtdEst][qtdSim];
+	int m[qtdEst][qtdSim];
 
-  for(i=0; i<qtdEst; i++){
-    for(j=0; j<qtdSim; j++){
-      printf("para o estado e%d e simbolo %c, qual o proximo estado? ", 1+i,vSim[j]);
-      scanf("%d", &m[i][j]);
-    }
-  }
+	for(i=0; i<qtdEst; i++){
+    	for(j=0; j<qtdSim; j++){
+    		printf("para o estado e%d e simbolo %c, qual o proximo estado? ", 1+i,vSim[j]);
+    		scanf("%d", &m[i][j]);
+    	}
+	}
 
-  for(i=0; i<qtdEst; i++){
-  	for(j=0; j<qtdSim; j++){
-  		printf("%d ", m[i][j]);
+	for(i=0; i<qtdEst; i++){
+  		for(j=0; j<qtdSim; j++){
+  			printf("%d ", m[i][j]);
+		}
+		printf("\n");
+	}
 
-	  }
-	printf("\n");
-  }
-
-
-system("PAUSE");
-return 0;
+	system("PAUSE");
+	return 0;
 }
