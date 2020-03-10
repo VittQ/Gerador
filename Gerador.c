@@ -75,7 +75,7 @@ int main() {
 
 	for(i=0; i<qtdEst; i++){
   		for(j=0; j<qtdSim; j++){
-  			printf("%d ", m[i][j]);
+  			printf(" %d ", m[i][j]);
 		}
 		printf("\n");
 	}
@@ -145,6 +145,7 @@ int main() {
 					}	
 				}
 				fpp = 0;
+				
 				
 				
 				if(qtdFin == 1){
@@ -274,17 +275,21 @@ int main() {
 			
 			break;
 		default:
-			printf("Opcao invalida.");
+			printf("Opcao invalida.\n");
+			printf("\n");
 			break;
 	}
 	
+	printf("Codigo gerado em mec.c\n");
+	printf("\n");
 	
+	/*
 	if(n == 2){
 		printf("Codigo gerado com Goto.\n");
 	}
 	else{
 		printf("Codigo gerado com funcao.\n");
-	}
+	}*/
 	
 	system("PAUSE");
 	return 0;
