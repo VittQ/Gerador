@@ -4,15 +4,20 @@
 int main() {
 
 	int i,j,x;
+	int n; //switch case
 	int qtdSim; // quantidade de simbolos
 	int qtdEst; // quantidade de estados
 	int estIni; // armazena estado inicial
 	int qtdFin; // quantidade de estados finais
 	int estFin; // caso final unico
 	int cFDP; // variavel auxiliar
+	//char nome[20]; // vetor char nome do alg
 
 
-
+	//Nome do algoritimo
+//	printf("De um nome para o algoritimo: ");
+//	scanf("%c", &nome);
+	
 	// coletar quantidade de simbolos
 	printf("Quantidade de simbolos: ");
 	scanf("%d", &qtdSim);
@@ -77,100 +82,209 @@ int main() {
 
     // ===========================================================INICIO ARQUIVO==================================================
 	int fpp = 0; // flag para controlar o primeiro if
-	int fef = 0; // flag para saber se é estado final
 	
 
 	FILE *arq;
 	arq = fopen("mec.c", "wt");  // Cria um arquivo texto para gravação
 	
-	
-		
-		
-	//Incio padrão
-	fprintf(arq,"#include <stdio.h>\n");
-	fprintf(arq,"#include <stdlib.h>\n");
-	fprintf(arq,"#include <conio.h>\n");
-	fprintf(arq,"\n");
-	fprintf(arq,"int main(){\n");
-	fprintf(arq,"\n");
-	fprintf(arq,"	char p[100];\n");
-	fprintf(arq,"	int i;\n");
-	fprintf(arq,"	i=0;\n");
-	fprintf(arq,"	printf(\"Digite a palavra: \");\n");
-	fprintf(arq,"	gets(p);\n");
+	printf("Digite 1 para gerar codigo usando Funcao.\n");
+	printf("Digite 2 para gerar codigo usando GoTo.\n");
+	scanf("%d", &n);
 	
 	
-	// ======================================================UTILIZANDO GOTO======================================================
-	fprintf(arq,"	goto E%d;\n", estIni);
-	fprintf(arq,"\n");
-
-	
-	
-
-	for(i=0; i<qtdEst; i++){
-		fprintf(arq,"	E%d:\n", i);
-		
-		for(j=0; j<qtdSim; j++){
-			if(m[i][j] != -1){
+	switch(n){
+		case 1:
+			// ======================================================UTILIZANDO FUNÇÃO====================================================
+			//Incio padrão
+			fprintf(arq,"#include <stdio.h>\n");
+			fprintf(arq,"#include <stdlib.h>\n");
+			fprintf(arq,"#include <conio.h>\n");
+			fprintf(arq,"\n");
+			for(i=0; i<qtdEst; i++){
+				fprintf(arq,"void e%d();\n", i);
+			}
+			fprintf(arq,"void aceita();\n");
+			fprintf(arq,"void rejeita();\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"char v[20];\n");
+			fprintf(arq,"int i;\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"int main(){\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"	i=0;\n");
+			fprintf(arq,"	printf(\"Digite a sentenca: \");\n");
+			fprintf(arq,"	gets(v);\n");
+			fprintf(arq,"	e%d();\n", estIni);
+			fprintf(arq,"\n");
+			fprintf(arq,"	return 0;\n");
+			fprintf(arq,"}\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"\n");
 			
+			for(i=0; i<qtdEst; i++){
+				fprintf(arq,"void e%d(){\n", i);
+				for(j=0; j<qtdSim; j++){
+					
+					if(m[i][j] != -1){
+						
+						if(fpp == 0){
+							fprintf(arq,"	if(v[i] == '%c'){\n", vSim[j]);
+							fprintf(arq,"	i++;\n");
+							fprintf(arq,"	e%d();\n", m[i][j]);
+							fprintf(arq,"	}\n");
+							fprintf(arq,"\n");
+							fpp += 1;
+						}
+						else{
+							fprintf(arq,"	else if (v[i] == '%c'){\n", vSim[j]);
+							fprintf(arq,"	i++;\n");
+							fprintf(arq,"	e%d();\n", m[i][j]);
+							fprintf(arq,"	}\n");
+							fprintf(arq,"\n");
+						}	
+					}	
+				}
+				fpp = 0;
 				
-				if(fpp == 0){
-				fprintf(arq,"		if(p[i] == '%c'){\n", vSim[j]);
-				fprintf(arq,"			i++;\n");	
-				fprintf(arq,"			goto E%d;\n", m[i][j]);	
-				fprintf(arq,"		}\n");			
+				
+				if(qtdFin == 1){
+					if(estFin == i){
+						fprintf(arq,"	else if(v[i] == 0){\n");
+						fprintf(arq,"		aceita();\n");
+						fprintf(arq,"	}\n");
+						fprintf(arq,"\n");
+					}
+				}
+				else{
+					for(x=0; x<qtdFin; x++){
+						if(vFin[x] == i){
+							fprintf(arq,"	else if(v[i] == 0){\n");
+							fprintf(arq,"		aceita();\n");
+							fprintf(arq,"	}\n");
+							fprintf(arq,"\n");
+						}
+					}
+				}
+				
+				fprintf(arq,"	else{\n");
+				fprintf(arq,"		rejeita();\n");
+				fprintf(arq,"	}\n");
+				fprintf(arq,"}\n");
+				fprintf(arq,"\n");
+				fprintf(arq,"\n");
+			}
+			fprintf(arq,"void aceita(){\n");
+			fprintf(arq,"	printf(\"sentenca aceita.\");\n");
+			fprintf(arq,"	getch();\n");
+			fprintf(arq,"	exit(0);\n");
+			fprintf(arq,"}\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"void rejeita(){\n");
+			fprintf(arq,"	printf(\"sentenca rejeitada.\");\n");
+			fprintf(arq,"	getch();\n");
+			fprintf(arq,"	exit(0);\n");
+			fprintf(arq,"	}\n");
+			break;
+		
+		case 2:
+			// ======================================================UTILIZANDO GOTO======================================================
+			//Incio padrão
+			fprintf(arq,"#include <stdio.h>\n");
+			fprintf(arq,"#include <stdlib.h>\n");
+			fprintf(arq,"#include <conio.h>\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"int main(){\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"	char p[100];\n");
+			fprintf(arq,"	int i;\n");
+			fprintf(arq,"	i=0;\n");
+			fprintf(arq,"	printf(\"Digite a palavra: \");\n");
+			fprintf(arq,"	gets(p);\n");
+			fprintf(arq,"	goto E%d;\n", estIni);
+			fprintf(arq,"\n");
+		
+			
+			
+		
+			for(i=0; i<qtdEst; i++){
+				fprintf(arq,"	E%d:\n", i);
+				
+				for(j=0; j<qtdSim; j++){
+					if(m[i][j] != -1){
+					
+						
+						if(fpp == 0){
+						fprintf(arq,"		if(p[i] == '%c'){\n", vSim[j]);
+						fprintf(arq,"			i++;\n");	
+						fprintf(arq,"			goto E%d;\n", m[i][j]);	
+						fprintf(arq,"		}\n");			
+						}
+							
+						else{
+							fprintf(arq,"		else if(p[i] == '%c'){\n", vSim[j]);
+							fprintf(arq,"			i++;\n");
+							fprintf(arq,"			goto E%d;\n", m[i][j]);
+							fprintf(arq,"		}\n");
+						}
+						
+						fpp += 1;			
+					}	
+				}
+				fpp = 0;
+				
+				// só se for UM final
+				if(qtdFin == 1){
+					if(estFin == i){
+						fprintf(arq,"		else if(p[i] == 0){\n");
+						fprintf(arq,"			goto ACEITA;\n");
+						fprintf(arq,"		}\n");
+					}
+				}else{
+					for(x=0; x<qtdFin; x++){
+						if(vFin[x] == i){
+							fprintf(arq,"		else if(p[i] == 0){\n");
+							fprintf(arq,"			goto ACEITA;\n");
+							fprintf(arq,"		}\n");
+						}
+					}
 				}
 					
-				else{
-					fprintf(arq,"		else if(p[i] == '%c'){\n", vSim[j]);
-					fprintf(arq,"			i++;\n");
-					fprintf(arq,"			goto E%d;\n", m[i][j]);
-					fprintf(arq,"		}\n");
-				}
-				
-				fpp += 1;			
-			}	
-		}
-		fpp = 0;
-		
-		// só se for UM final
-		if(qtdFin == 1){
-			fef = estFin;
-			if(fef == i){
-				fprintf(arq,"		else if(p[i] == 0){\n");
-				fprintf(arq,"			goto ACEITA;\n");
+				fprintf(arq,"		else{\n");
+				fprintf(arq,"			goto REJEITA;\n");
 				fprintf(arq,"		}\n");
+				fprintf(arq,"\n");
+				fprintf(arq,"\n");
 			}
-		}else{
-			for(x=0; x<qtdFin; x++){
-				if(vFin[x] == i){
-					fprintf(arq,"		else if(p[i] == 0){\n");
-					fprintf(arq,"			goto ACEITA;\n");
-					fprintf(arq,"		}\n");
-				}
-			}
-		}
 			
-		fprintf(arq,"		else{\n");
-		fprintf(arq,"			goto REJEITA;\n");
-		fprintf(arq,"		}\n");
-		fprintf(arq,"\n");
-		fprintf(arq,"\n");
+			fprintf(arq,"	ACEITA:\n");
+			fprintf(arq,"		printf(\"Palavra aceita\");\n");
+			fprintf(arq,"		getch();\n");
+			fprintf(arq,"		exit(0);\n");
+			fprintf(arq,"\n");
+			fprintf(arq,"\n");
+			
+			fprintf(arq,"\n");
+			fprintf(arq,"	REJEITA:\n");
+			fprintf(arq,"		printf(\"Palavra rejeitada\");\n");
+			fprintf(arq,"		getch();\n");
+			fprintf(arq,"		exit(0);\n");
+			fprintf(arq,"}\n");
+			//=======================================================================================================================================
+			
+			break;
+		default:
+			printf("Opcao invalida.");
+			break;
 	}
 	
-	fprintf(arq,"	ACEITA:\n");
-	fprintf(arq,"		printf(\"Palavra aceita\");\n");
-	fprintf(arq,"		getch();\n");
-	fprintf(arq,"		exit(0);\n");
-	fprintf(arq,"\n");
-	fprintf(arq,"\n");
 	
-	fprintf(arq,"\n");
-	fprintf(arq,"	REJEITA:\n");
-	fprintf(arq,"		printf(\"Palavra rejeitada\");\n");
-	fprintf(arq,"		getch();\n");
-	fprintf(arq,"		exit(0);\n");
-	fprintf(arq,"}\n");
+	if(n == 2){
+		printf("Codigo gerado com Goto.\n");
+	}
+	else{
+		printf("Codigo gerado com funcao.\n");
+	}
 	
 	system("PAUSE");
 	return 0;
