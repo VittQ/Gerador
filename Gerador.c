@@ -11,13 +11,14 @@ int main() {
 	int qtdFin; // quantidade de estados finais
 	int estFin; // caso final unico
 	int cFDP; // variavel auxiliar
-	//char nome[20]; // vetor char nome do alg
+	char nome[20]; // vetor char nome do alg
 
 
 	//Nome do algoritimo
-//	printf("De um nome para o algoritimo: ");
-//	scanf("%c", &nome);
-	
+	printf("De um nome para o algoritimo: \n");
+	printf("Nao se esqueca de colocar \".c\" apos o nome.\n");
+	scanf("%s", &nome);
+
 	// coletar quantidade de simbolos
 	printf("Quantidade de simbolos: ");
 	scanf("%d", &qtdSim);
@@ -82,16 +83,16 @@ int main() {
 
     // ===========================================================INICIO ARQUIVO==================================================
 	int fpp = 0; // flag para controlar o primeiro if
-	
+
 
 	FILE *arq;
-	arq = fopen("mec.c", "wt");  // Cria um arquivo texto para gravação
-	
+	arq = fopen(nome, "wt");  // Cria um arquivo texto para gravação
+
 	printf("Digite 1 para gerar codigo usando Funcao.\n");
 	printf("Digite 2 para gerar codigo usando GoTo.\n");
 	scanf("%d", &n);
-	
-	
+
+
 	switch(n){
 		case 1:
 			// ======================================================UTILIZANDO FUNÇÃO====================================================
@@ -120,13 +121,13 @@ int main() {
 			fprintf(arq,"}\n");
 			fprintf(arq,"\n");
 			fprintf(arq,"\n");
-			
+
 			for(i=0; i<qtdEst; i++){
 				fprintf(arq,"void e%d(){\n", i);
 				for(j=0; j<qtdSim; j++){
-					
+
 					if(m[i][j] != -1){
-						
+
 						if(fpp == 0){
 							fprintf(arq,"	if(v[i] == '%c'){\n", vSim[j]);
 							fprintf(arq,"	i++;\n");
@@ -141,13 +142,13 @@ int main() {
 							fprintf(arq,"	e%d();\n", m[i][j]);
 							fprintf(arq,"	}\n");
 							fprintf(arq,"\n");
-						}	
-					}	
+						}
+					}
 				}
 				fpp = 0;
-				
-				
-				
+
+
+
 				if(qtdFin == 1){
 					if(estFin == i){
 						fprintf(arq,"	else if(v[i] == 0){\n");
@@ -166,7 +167,7 @@ int main() {
 						}
 					}
 				}
-				
+
 				fprintf(arq,"	else{\n");
 				fprintf(arq,"		rejeita();\n");
 				fprintf(arq,"	}\n");
@@ -187,7 +188,7 @@ int main() {
 			fprintf(arq,"	exit(0);\n");
 			fprintf(arq,"	}\n");
 			break;
-		
+
 		case 2:
 			// ======================================================UTILIZANDO GOTO======================================================
 			//Incio padrão
@@ -204,36 +205,36 @@ int main() {
 			fprintf(arq,"	gets(p);\n");
 			fprintf(arq,"	goto E%d;\n", estIni);
 			fprintf(arq,"\n");
-		
-			
-			
-		
+
+
+
+
 			for(i=0; i<qtdEst; i++){
 				fprintf(arq,"	E%d:\n", i);
-				
+
 				for(j=0; j<qtdSim; j++){
 					if(m[i][j] != -1){
-					
-						
+
+
 						if(fpp == 0){
 						fprintf(arq,"		if(p[i] == '%c'){\n", vSim[j]);
-						fprintf(arq,"			i++;\n");	
-						fprintf(arq,"			goto E%d;\n", m[i][j]);	
-						fprintf(arq,"		}\n");			
+						fprintf(arq,"			i++;\n");
+						fprintf(arq,"			goto E%d;\n", m[i][j]);
+						fprintf(arq,"		}\n");
 						}
-							
+
 						else{
 							fprintf(arq,"		else if(p[i] == '%c'){\n", vSim[j]);
 							fprintf(arq,"			i++;\n");
 							fprintf(arq,"			goto E%d;\n", m[i][j]);
 							fprintf(arq,"		}\n");
 						}
-						
-						fpp += 1;			
-					}	
+
+						fpp += 1;
+					}
 				}
 				fpp = 0;
-				
+
 				// só se for UM final
 				if(qtdFin == 1){
 					if(estFin == i){
@@ -250,21 +251,21 @@ int main() {
 						}
 					}
 				}
-					
+
 				fprintf(arq,"		else{\n");
 				fprintf(arq,"			goto REJEITA;\n");
 				fprintf(arq,"		}\n");
 				fprintf(arq,"\n");
 				fprintf(arq,"\n");
 			}
-			
+
 			fprintf(arq,"	ACEITA:\n");
 			fprintf(arq,"		printf(\"Palavra aceita\");\n");
 			fprintf(arq,"		getch();\n");
 			fprintf(arq,"		exit(0);\n");
 			fprintf(arq,"\n");
 			fprintf(arq,"\n");
-			
+
 			fprintf(arq,"\n");
 			fprintf(arq,"	REJEITA:\n");
 			fprintf(arq,"		printf(\"Palavra rejeitada\");\n");
@@ -272,17 +273,17 @@ int main() {
 			fprintf(arq,"		exit(0);\n");
 			fprintf(arq,"}\n");
 			//=======================================================================================================================================
-			
+
 			break;
 		default:
 			printf("Opcao invalida.\n");
 			printf("\n");
 			break;
 	}
-	
-	printf("Codigo gerado em mec.c\n");
+
+	printf("Codigo gerado %s\n", nome);
 	printf("\n");
-	
+
 	/*
 	if(n == 2){
 		printf("Codigo gerado com Goto.\n");
@@ -290,7 +291,7 @@ int main() {
 	else{
 		printf("Codigo gerado com funcao.\n");
 	}*/
-	
+
 	system("PAUSE");
 	return 0;
 }
