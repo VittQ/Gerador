@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
+
 
 int main() {
 
@@ -15,12 +17,12 @@ int main() {
 
 
 	//Nome do algoritimo
+	printf("================================== Nao se esqueca de colocar \".c\" apos o nome. ================================\n");
 	printf("De um nome para o algoritimo: \n");
-	printf("Nao se esqueca de colocar \".c\" apos o nome.\n");
 	scanf("%s", &nome);
 
 	// coletar quantidade de simbolos
-	printf("Quantidade de simbolos: ");
+	printf("Quantidade de simbolos do automato: ");
 	scanf("%d", &qtdSim);
 
 	char vSim[qtdSim];  // vetor para armazenar os simbolos
@@ -65,8 +67,9 @@ int main() {
 	}
 
 
-	int m[qtdEst][qtdSim];
+	int m[qtdEst][qtdSim]; //matriz[linha][coluna]
 
+	// preencher matriz
 	for(i=0; i<qtdEst; i++){
     	for(j=0; j<qtdSim; j++){
     		printf("para o estado e%d e simbolo %c, qual o proximo estado? ", i,vSim[j]);
@@ -74,13 +77,14 @@ int main() {
     	}
 	}
 
+/* imprimir matriz
 	for(i=0; i<qtdEst; i++){
   		for(j=0; j<qtdSim; j++){
   			printf(" %d ", m[i][j]);
 		}
 		printf("\n");
 	}
-
+*/
     // ===========================================================INICIO ARQUIVO==================================================
 	int fpp = 0; // flag para controlar o primeiro if
 
@@ -88,6 +92,7 @@ int main() {
 	FILE *arq;
 	arq = fopen(nome, "wt");  // Cria um arquivo texto para gravação
 
+	//switch case
 	printf("Digite 1 para gerar codigo usando Funcao.\n");
 	printf("Digite 2 para gerar codigo usando GoTo.\n");
 	scanf("%d", &n);
@@ -101,15 +106,19 @@ int main() {
 			fprintf(arq,"#include <stdlib.h>\n");
 			fprintf(arq,"#include <conio.h>\n");
 			fprintf(arq,"\n");
+			
 			for(i=0; i<qtdEst; i++){
 				fprintf(arq,"void e%d();\n", i);
 			}
+			
 			fprintf(arq,"void aceita();\n");
 			fprintf(arq,"void rejeita();\n");
 			fprintf(arq,"\n");
+			
 			fprintf(arq,"char v[20];\n");
 			fprintf(arq,"int i;\n");
 			fprintf(arq,"\n");
+			
 			fprintf(arq,"int main(){\n");
 			fprintf(arq,"\n");
 			fprintf(arq,"	i=0;\n");
@@ -119,6 +128,7 @@ int main() {
 			fprintf(arq,"\n");
 			fprintf(arq,"	return 0;\n");
 			fprintf(arq,"}\n");
+			
 			fprintf(arq,"\n");
 			fprintf(arq,"\n");
 
@@ -130,24 +140,22 @@ int main() {
 
 						if(fpp == 0){
 							fprintf(arq,"	if(v[i] == '%c'){\n", vSim[j]);
-							fprintf(arq,"	i++;\n");
-							fprintf(arq,"	e%d();\n", m[i][j]);
+							fprintf(arq,"		i++;\n");
+							fprintf(arq,"		e%d();\n", m[i][j]);
 							fprintf(arq,"	}\n");
 							fprintf(arq,"\n");
 							fpp += 1;
 						}
 						else{
 							fprintf(arq,"	else if (v[i] == '%c'){\n", vSim[j]);
-							fprintf(arq,"	i++;\n");
-							fprintf(arq,"	e%d();\n", m[i][j]);
+							fprintf(arq,"		i++;\n");
+							fprintf(arq,"		e%d();\n", m[i][j]);
 							fprintf(arq,"	}\n");
 							fprintf(arq,"\n");
 						}
 					}
 				}
 				fpp = 0;
-
-
 
 				if(qtdFin == 1){
 					if(estFin == i){
@@ -175,6 +183,7 @@ int main() {
 				fprintf(arq,"\n");
 				fprintf(arq,"\n");
 			}
+			
 			fprintf(arq,"void aceita(){\n");
 			fprintf(arq,"	printf(\"sentenca aceita.\");\n");
 			fprintf(arq,"	getch();\n");
@@ -182,12 +191,15 @@ int main() {
 			fprintf(arq,"}\n");
 			fprintf(arq,"\n");
 			fprintf(arq,"\n");
+			
 			fprintf(arq,"void rejeita(){\n");
 			fprintf(arq,"	printf(\"sentenca rejeitada.\");\n");
 			fprintf(arq,"	getch();\n");
 			fprintf(arq,"	exit(0);\n");
-			fprintf(arq,"	}\n");
+			fprintf(arq,"}\n");
 			break;
+
+
 
 		case 2:
 			// ======================================================UTILIZANDO GOTO======================================================
@@ -196,6 +208,7 @@ int main() {
 			fprintf(arq,"#include <stdlib.h>\n");
 			fprintf(arq,"#include <conio.h>\n");
 			fprintf(arq,"\n");
+			
 			fprintf(arq,"int main(){\n");
 			fprintf(arq,"\n");
 			fprintf(arq,"	char p[100];\n");
@@ -215,21 +228,18 @@ int main() {
 				for(j=0; j<qtdSim; j++){
 					if(m[i][j] != -1){
 
-
 						if(fpp == 0){
 						fprintf(arq,"		if(p[i] == '%c'){\n", vSim[j]);
 						fprintf(arq,"			i++;\n");
 						fprintf(arq,"			goto E%d;\n", m[i][j]);
 						fprintf(arq,"		}\n");
 						}
-
 						else{
 							fprintf(arq,"		else if(p[i] == '%c'){\n", vSim[j]);
 							fprintf(arq,"			i++;\n");
 							fprintf(arq,"			goto E%d;\n", m[i][j]);
 							fprintf(arq,"		}\n");
 						}
-
 						fpp += 1;
 					}
 				}
@@ -275,22 +285,17 @@ int main() {
 			//=======================================================================================================================================
 
 			break;
+			
+			
 		default:
 			printf("Opcao invalida.\n");
 			printf("\n");
 			break;
 	}
 
-	printf("Codigo gerado %s\n", nome);
+	printf("Codigo gerado em %s\n", nome);
 	printf("\n");
 
-	/*
-	if(n == 2){
-		printf("Codigo gerado com Goto.\n");
-	}
-	else{
-		printf("Codigo gerado com funcao.\n");
-	}*/
 
 	system("PAUSE");
 	return 0;
